@@ -16,9 +16,10 @@ public class UserController {
     @RequestMapping(value="/login", method = RequestMethod.POST)
     public UserEntity login(@RequestParam("userName") String userName, @RequestParam("password") String password){
         System.out.println("userName: "+userName);
-        UserEntity userEntity = new UserEntity();
-
-        return userEntity;
-        //return userService.login(userName, password);
+        return userService.login(userName, password);
     }
+
+
+
 }
+
