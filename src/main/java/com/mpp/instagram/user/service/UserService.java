@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Service
 public class UserService {
 
-//    @Autowired
-//    UserRepository userRepo ;
-//
-//    public UserEntity login(String userName, String password){
-//       return userRepo.findByUsernameAndPassword(userName, password);
-//
-//    }
+    @Autowired
+    UserRepository userRepo ;
+
+    public UserEntity login(String userName, String password){
+       return userRepo.findByUsernameAndPassword(userName, password);
+
+    }
 }

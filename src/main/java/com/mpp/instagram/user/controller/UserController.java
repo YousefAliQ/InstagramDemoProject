@@ -9,14 +9,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
-//    @Autowired
-//    UserService userService;
-////    @PostMapping("add")
-////    public
-//    @RequestMapping(value="/login", method = RequestMethod.POST)
-//    public UserEntity login(@RequestParam("userName") String userName, @RequestParam("password") String password){
-//        System.out.println("userName: "+userName);
-//        return userService.login(userName, password);
+    @Autowired
+    UserService userService;
+//    @PostMapping("add")
+//    public
+    @RequestMapping(value="/login", method = RequestMethod.POST)
+    public UserEntity login(@RequestParam("userName") String userName, @RequestParam("password") String password){
+        System.out.println("userName: "+userName);
+        UserEntity userEntity = new UserEntity();
 
-//    }
+        return userEntity;
+        //return userService.login(userName, password);
+    }
 }
