@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserPostTesting {
     @RequestMapping(value="/testPost", method = RequestMethod.POST)
     public String test(@RequestParam("userName") String userName, @RequestParam("password") String password){
-       if (userName.equals("raza") && password.equals("raza") ){
+       if ( userName.equals("raza") && password.equals("raza") ){
            return "It's Working dude!";
        }
        return "incorrect, try again!";
