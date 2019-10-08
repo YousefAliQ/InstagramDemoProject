@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Service
 public class UserService {
 
-   // @Autowired
+    @Autowired
     UserRepository userRepo ;
 
-    public UserEntity login(String userName, String password){
-      // return userRepo.findByUsernameAndPassword(userName, password);
-    return null;
+    public UserEntity isUserValid(String username, String password) {
+        return null;
+    }
+
+    public UserEntity saveDataInToDatabase(UserEntity ent) {
+        return userRepo.save(ent);
     }
 }
