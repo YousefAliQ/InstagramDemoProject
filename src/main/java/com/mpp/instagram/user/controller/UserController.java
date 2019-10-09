@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
+import java.util.List;
+
 @RestController
 public class UserController {
 
@@ -23,9 +26,10 @@ public class UserController {
 
     // New Get Code Functionality
     @RequestMapping("/signup")
-    public ResponseEntity<UserEntity>  getRequestFromSignIn( )
+    public List<UserEntity>  getRequestFromSignIn( )
     {
-        return new ResponseEntity<UserEntity>(HttpStatus.BAD_REQUEST);
+        List<UserEntity> getAllData=userService.listAll(); //Getting all the data from the database
+        return getAllData;
     }
     @RequestMapping("/signin")
     public String  getRequestFromSignUp( )
@@ -43,14 +47,14 @@ public class UserController {
 
 
     @RequestMapping(method = RequestMethod.POST , value = "/signin")
-    public ResponseEntity<UserEntity> signInUser(@RequestParam("username") String username,@RequestParam("password") String password)
+    public ResponseEntity<UserEntity> signInUser(@RequestBody UserEntity input)
     {
-        UserEntity isValid=userService.isUserValid(username,password);
+        UserEntity isValid=userService.isUserValid(input.getUsername(),input.getPassword());
 
-//        if(isValid==false)
-//        {
-//            return new ResponseEntity<UserEntity>(HttpStatus.BAD_REQUEST);
-//        }
+        if(isValid==null)
+        {
+            return new ResponseEntity<UserEntity>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<UserEntity>(HttpStatus.OK);
     }
 
