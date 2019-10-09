@@ -44,8 +44,12 @@ public class UserController {
         UserEntity returnuser=userService.saveDataInToDatabase(ent);
         return new ResponseEntity<UserEntity>(returnuser,HttpStatus.OK);
     }
-
-    //Coment addedd to check from Github Edited by joe! First time
+//OverWrite Master Code
+//<<<<<<< HEAD
+//    //Coment addedd to check from Github Edited by joe! First time
+//=======
+//    //Coment addedd to check from Github Edited by joe! Second
+//>>>>>>> 899e7e712737ef48b28b56d7cdb57fd20f1dda1e
     @RequestMapping(method = RequestMethod.POST , value = "/signin")
     public ResponseEntity<UserEntity> signInUser(@RequestBody UserEntity input)
     {
