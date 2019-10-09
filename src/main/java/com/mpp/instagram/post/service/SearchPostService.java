@@ -1,4 +1,4 @@
 package com.mpp.instagram.post.service;
 
-public class postServices {
+public class SearchPostService {
 }

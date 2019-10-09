@@ -1,4 +1,4 @@
 package com.mpp.instagram.livefeed.repository;
 
-public interface livefeedRepository {
+public interface LivefeedRepository {
 }

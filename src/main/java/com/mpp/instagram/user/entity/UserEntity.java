@@ -1,10 +1,8 @@
 package com.mpp.instagram.user.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import org.springframework.data.cassandra.core.mapping.Table;
 
-@Entity
-@Table(name = "INSTAGRAM_USER")
+@Table("INSTAGRAM_USER")
 public class UserEntity {
 
     private long id;

@@ -1,4 +1,4 @@
 package com.mpp.instagram.friend.repository;
 
-public interface friendRepository {
+public interface FriendRepository {
 }
