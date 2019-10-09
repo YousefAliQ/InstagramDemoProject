@@ -50,7 +50,7 @@ public class UserController {
     public ResponseEntity<UserEntity> signInUser(@RequestBody UserEntity input)
     {
         UserEntity isValid=userService.isUserValid(input.getUsername(),input.getPassword());
-
+        //sinin value
         if(isValid==null)
         {
             return new ResponseEntity<UserEntity>(HttpStatus.BAD_REQUEST);
