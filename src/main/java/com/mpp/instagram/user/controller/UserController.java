@@ -46,7 +46,7 @@ public class UserController {
     }
 //OverWrite Master Code
 //<<<<<<< HEAD
-//    //Coment addedd to check from Github Edited by joe! First time
+    //Coment addedd to check from Github Edited by joe! First time
 //=======
 //    //Coment addedd to check from Github Edited by joe! Second
 //>>>>>>> 899e7e712737ef48b28b56d7cdb57fd20f1dda1e
