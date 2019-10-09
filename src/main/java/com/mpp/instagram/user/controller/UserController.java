@@ -45,7 +45,7 @@ public class UserController {
         return new ResponseEntity<UserEntity>(returnuser,HttpStatus.OK);
     }
 
-    //Coment addedd to check from Github
+    //Coment addedd to check from Github Edited by joe!
     @RequestMapping(method = RequestMethod.POST , value = "/signin")
     public ResponseEntity<UserEntity> signInUser(@RequestBody UserEntity input)
     {
