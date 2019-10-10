@@ -44,7 +44,7 @@ public class UserController {
         UserEntity returnuser=userService.saveDataInToDatabase(ent);
         return new ResponseEntity<UserEntity>(returnuser,HttpStatus.OK);
     }
-//OverWrite Master Code
+//OverWrite Master Code ... Accepted and merged with master by Yousef.
 //<<<<<<< HEAD
     //Coment addedd to check from Github Edited by joe! First time
 //=======
