@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.parser.Entity;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -50,16 +52,23 @@ public class UserController {
 //=======
 //    //Coment addedd to check from Github Edited by joe! Second
 //>>>>>>> 899e7e712737ef48b28b56d7cdb57fd20f1dda1e
-    @RequestMapping(method = RequestMethod.POST , value = "/signin")
-    public ResponseEntity<UserEntity> signInUser(@RequestBody UserEntity input)
+    @CrossOrigin(origins  = "*")
+    @RequestMapping(method = RequestMethod.POST , value = "/signin", produces="application/json")
+    @ResponseBody
+    //public ResponseEntity<UserEntity> signInUser(@RequestBody UserEntity input)
+    public String signInUser(@RequestBody Map<String , ?> input)
     {
-        UserEntity isValid=userService.isUserValid(input.getUsername(),input.getPassword());
-        
-        if(isValid==null)
-        {
-            return new ResponseEntity<UserEntity>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<UserEntity>(HttpStatus.OK);
+        //UserEntity isValid=userService.isUserValid(input.getUsername(),input.getPassword());
+//        if(isValid==null)
+//        {
+//            return new ResponseEntity<UserEntity>(HttpStatus.BAD_REQUEST);
+//        }
+//        return new ResponseEntity<UserEntity>(HttpStatus.OK);
+        Map<String , String> result = new HashMap<>();
+        result.put("pass" , (String)input.get("password"));
+        result.put("user" , (String)input.get("username"));
+
+        return "{'error':'Username is not correct!'}";//new ResponseEntity<>( result, HttpStatus.OK );
     }
 }
 
