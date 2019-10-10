@@ -24,6 +24,7 @@ public class UserEntity implements Serializable {
     @Column("password")
     private String password;  // Storing password
 
+
     //@Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {

@@ -2,16 +2,12 @@ package com.mpp.instagram.user.controller;
 
 import com.mpp.instagram.user.entity.UserEntity;
 import com.mpp.instagram.user.service.UserService;
-import javafx.application.Application;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Entity;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -32,34 +28,46 @@ public class UserController {
     }
 
     /// Post Requests for SignIn and SignUp
-    @RequestMapping(method = RequestMethod.POST , value = "/signup", consumes ="application/json" )
-    public String signUpUser(@RequestBody UserEntity ent)
+    @RequestMapping(method = RequestMethod.POST , value = "/signup", consumes ="application/json" ,produces = "application/json")
+    public Map<String, String> signUpUser(@RequestBody Map<String ,?> input)
     {
-        //LookUp Username In Database if it already exists
-        UserEntity userexist=userService.findByUsername(ent.getUsername());
-        if(userexist==null)
+        Map<String, String> result = new HashMap<>();
+        try {
+            //LookUp Username In Database if it already exists
+            UserEntity userexist = userService.findByUsername((String) input.get("username"));
+            if (userexist == null) {
+                userService.saveDataInToDatabase(input);
+                result.put("Result", "Success");
+                result.put("userexist", "false");
+            } else {
+                result.put("Result", "Fail");
+                result.put("userexist", "true");
+            }
+        }
+        catch (Exception ex)
         {
-            userService.saveDataInToDatabase(ent);
-            return "success";
+            ex.printStackTrace();
         }
-        else {
-            return "userexist";
-        }
+        return result;
     }
 
-    @RequestMapping(method = RequestMethod.POST , value = "/signin")
-    public String signInUser(@RequestBody UserEntity input)
+    @RequestMapping(method = RequestMethod.POST , value = "/signin",consumes = "application/json" ,produces = "application/json")
+    public Map<String, String> signInUser(@RequestBody Map<String ,?> input)
     {
-        UserEntity isValid=userService.isUserValid(input.getUsername(),input.getPassword());
-        
-        if(isValid!=null)
-        {
-            return "success";
+        Map<String, String> result = new HashMap<>();
+        try {
+            UserEntity isValid = userService.isUserValid((String) input.get("username"), (String) input.get("password"));
+            if (isValid != null) {
+                result.put("Result", "Success");
+            } else {
+                result.put("Result", "Fail");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            return "fail";
+            ex.printStackTrace();
         }
+        return result;
     }
 }
 

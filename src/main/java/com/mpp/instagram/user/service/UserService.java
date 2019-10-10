@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -21,10 +22,12 @@ public class UserService {
         return userRepo.findByUsernameAndPassword(username,password);
     }
 
-    public void saveDataInToDatabase(UserEntity ent) {
+    public void saveDataInToDatabase(Map<String ,?> input) {
         //Generating Random UUID Everytime Inserting into database
         Long id=UUID.randomUUID().getLeastSignificantBits() & Long.MAX_VALUE;
+        UserEntity ent = new UserEntity((String) input.get("username"),(String) input.get("fullname"),(String) input.get("email"),(String) input.get("password"));
         ent.setId(id);
+        //Saving User Entity object in Cassandra database
          userRepo.save(ent);
     }
     //Showing all records Inserting into Database
