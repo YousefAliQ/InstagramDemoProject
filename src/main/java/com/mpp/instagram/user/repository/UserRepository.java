@@ -11,4 +11,6 @@ import javax.swing.text.html.parser.Entity;
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
     @AllowFiltering
     public UserEntity findByUsernameAndPassword(String username, String password);
+
+     UserEntity findByUsername(String username);
 }
