@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class UserController {
@@ -25,29 +26,40 @@ public class UserController {
         return getAllData;
     }
     @RequestMapping("/signin")
-    public String  getRequestFromSignUp( )
+    public String  getRequestFromSignUp()
     {
         return "SignUp Page Hit";
     }
 
     /// Post Requests for SignIn and SignUp
-    @RequestMapping(method = RequestMethod.POST , value = "/signup", produces = "application/json", consumes ="application/json" )
-    public ResponseEntity<UserEntity> signUpUser(@RequestBody UserEntity ent)
+    @RequestMapping(method = RequestMethod.POST , value = "/signup", consumes ="application/json" )
+    public String signUpUser(@RequestBody UserEntity ent)
     {
-        UserEntity returnuser=userService.saveDataInToDatabase(ent);
-        return new ResponseEntity<UserEntity>(returnuser,HttpStatus.OK);
+        //LookUp Username In Database if it already exists
+        UserEntity userexist=userService.findByUsername(ent.getUsername());
+        if(userexist==null)
+        {
+            userService.saveDataInToDatabase(ent);
+            return "success";
+        }
+        else {
+            return "userexist";
+        }
     }
 
     @RequestMapping(method = RequestMethod.POST , value = "/signin")
-    public ResponseEntity<UserEntity> signInUser(@RequestBody UserEntity input)
+    public String signInUser(@RequestBody UserEntity input)
     {
         UserEntity isValid=userService.isUserValid(input.getUsername(),input.getPassword());
         
-        if(isValid==null)
+        if(isValid!=null)
         {
-            return new ResponseEntity<UserEntity>(HttpStatus.BAD_REQUEST);
+            return "success";
         }
-        return new ResponseEntity<UserEntity>(HttpStatus.OK);
+        else
+        {
+            return "fail";
+        }
     }
 }
 

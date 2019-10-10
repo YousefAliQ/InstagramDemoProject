@@ -21,16 +21,21 @@ public class UserService {
         return userRepo.findByUsernameAndPassword(username,password);
     }
 
-    public UserEntity saveDataInToDatabase(UserEntity ent) {
+    public void saveDataInToDatabase(UserEntity ent) {
         //Generating Random UUID Everytime Inserting into database
         Long id=UUID.randomUUID().getLeastSignificantBits() & Long.MAX_VALUE;
         ent.setId(id);
-        return userRepo.save(ent);
+         userRepo.save(ent);
     }
     //Showing all records Inserting into Database
     public List<UserEntity> listAll() {
-        List<UserEntity> products = new ArrayList<>();
-        userRepo.findAll().forEach(products::add); //fun with Java 8
-        return products;
+        List<UserEntity> records = new ArrayList<>();
+        userRepo.findAll().forEach(records::add); //fun with Java 8
+        return records;
+    }
+
+    public UserEntity findByUsername(String username) {
+         UserEntity user=userRepo.findByUsername(username);
+        return user;
     }
 }
