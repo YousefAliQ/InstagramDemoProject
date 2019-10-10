@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -21,6 +22,9 @@ public class UserService {
     }
 
     public UserEntity saveDataInToDatabase(UserEntity ent) {
+        //Generating Random UUID Everytime Inserting into database
+        Long id=UUID.randomUUID().getLeastSignificantBits() & Long.MAX_VALUE;
+        ent.setId(id);
         return userRepo.save(ent);
     }
     //Showing all records Inserting into Database
