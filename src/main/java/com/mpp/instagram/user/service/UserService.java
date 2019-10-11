@@ -4,9 +4,7 @@ import com.mpp.instagram.user.entity.UserEntity;
 import com.mpp.instagram.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +18,11 @@ public class UserService {
 
     public UserEntity isUserValid(String username, String password) {
         return userRepo.findByUsernameAndPassword(username,password);
+    }
+
+    public UserEntity isUserActive(String token) {
+        //return userRepo.findByToken(token);
+        return null;
     }
 
     public void saveDataInToDatabase(Map<String ,?> input) {
@@ -40,5 +43,9 @@ public class UserService {
     public UserEntity findByUsername(String username) {
          UserEntity user=userRepo.findByUsername(username);
         return user;
+    }
+
+    public UserEntity saveToken(UserEntity userEntity){
+        return userRepo.save(userEntity);
     }
 }

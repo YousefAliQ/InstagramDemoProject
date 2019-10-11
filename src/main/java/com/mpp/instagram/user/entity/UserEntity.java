@@ -1,13 +1,12 @@
 package com.mpp.instagram.user.entity;
 
-import org.springframework.data.annotation.Id;
+import com.datastax.driver.core.LocalDate;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 //import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 //@Entity
 @Table("INSTAGRAM_USER")
@@ -23,6 +22,42 @@ public class UserEntity implements Serializable {
     private String email;     //Storing Email
     @Column("password")
     private String password;  // Storing password
+    @Column("token")
+    private String token;  // Storing token
+    @Column("timestamp")
+    private String token_timestamp;  // Storing timestamp
+
+    public UserEntity(String username, String fullname, String email, String password, String token, String timestamp) {
+        this.username = username;
+        this.fullname = fullname;
+        this.email = email;
+        this.password = password;
+        this.token = token;
+        this.token_timestamp = timestamp;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getToken_timestamp() {
+        return token_timestamp;
+    }
+
+    public void setToken_timestamp(String token_timestamp) {
+        this.token_timestamp = token_timestamp;
+    }
+
+
+    public UserEntity(String username) {
+        this.username = username;
+    }
+    public UserEntity() {
+    }
 
 
     //@Id

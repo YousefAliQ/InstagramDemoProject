@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 //@RestController
 public class ProfileController {
 
+ // TODO : http://localhost:8080/profile/getPosts
 //    @Autowired
 //    ProfileServices profileService;
 //

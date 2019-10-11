@@ -5,12 +5,13 @@ import org.springframework.data.cassandra.repository.AllowFiltering;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.parser.Entity;
-
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
     @AllowFiltering
     public UserEntity findByUsernameAndPassword(String username, String password);
 
-     UserEntity findByUsername(String username);
+    UserEntity findByUsername(String username);
+    //UserEntity findByToken(String token);
+
+     //TokenEntity saveToken(String token, String username, Date date);
 }

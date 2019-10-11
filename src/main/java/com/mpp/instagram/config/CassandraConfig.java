@@ -52,7 +52,7 @@ import java.util.List;
 @Configuration
 @EnableReactiveCassandraRepositories(basePackages = "com.mpp.instagram")
 public class CassandraConfig extends AbstractCassandraConfiguration {
-    private static final String KEYSPACE = "instagram";
+    private static final String KEYSPACE = "instagram1";
     private static final String NODES = "127.0.0.1"; // comma seperated nodes
 
 
