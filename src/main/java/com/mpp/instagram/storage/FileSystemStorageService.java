@@ -21,14 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
+    private final Path profileLocation;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
+        this.profileLocation = Paths.get(properties.getProfileLocation());
     }
 
     @Override
-    public void store(MultipartFile file) {
+    public void store(MultipartFile file, String location) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -41,17 +43,26 @@ public class FileSystemStorageService implements StorageService {
                                 + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Files.copy(inputStream, this.rootLocation.resolve(filename),
-                        StandardCopyOption.REPLACE_EXISTING);
+                if(location.equals("profile")) {
+                    Files.copy(inputStream, this.profileLocation.resolve(filename),
+                            StandardCopyOption.REPLACE_EXISTING);
+                }
+                else {
+                    if(location.equals("post")) {
+                        Files.copy(inputStream, this.rootLocation.resolve(filename),
+                                StandardCopyOption.REPLACE_EXISTING);
+                    }
+                }
             }
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
+
     }
 
     @Override
-    public Stream<Path> loadAll() {
+    public Stream<Path> loadAllPost() {
         try {
             return Files.walk(this.rootLocation, 1)
                     .filter(path -> !path.equals(this.rootLocation))
@@ -63,15 +74,32 @@ public class FileSystemStorageService implements StorageService {
 
     }
 
+    //This is a test for both post and profile
     @Override
-    public Path load(String filename) {
+    public Stream<Path> loadAllProfile() {
+        try {
+            return Files.walk(this.profileLocation, 1)
+                    .filter(path -> !path.equals(this.profileLocation))
+                    .map(this.profileLocation::relativize);
+        }
+        catch (IOException e) {
+            throw new StorageException("Failed to read stored files", e);
+        }
+
+    }
+
+    @Override
+    public Path load(String filename, String location) {
+        if(location.equals("profile")) {
+            return profileLocation.resolve(filename);
+        }
         return rootLocation.resolve(filename);
     }
 
     @Override
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String filename, String location) {
         try {
-            Path file = load(filename);
+            Path file = load(filename, location);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
@@ -90,12 +118,14 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
+        FileSystemUtils.deleteRecursively(profileLocation.toFile());
     }
 
     @Override
     public void init() {
         try {
             Files.createDirectories(rootLocation);
+            Files.createDirectories(profileLocation);
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);

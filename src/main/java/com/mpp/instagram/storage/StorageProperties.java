@@ -8,14 +8,22 @@ public class StorageProperties {
     /**
      * Folder location for storing files
      */
-    private String location = "upload-dir";
+    private String postLocation = "upload-dir/post";
+    private String profileLocation = "upload-dir/profile";
 
     public String getLocation() {
-        return location;
+        return postLocation;
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        this.postLocation = location;
     }
 
+    public String getProfileLocation() {
+        return profileLocation;
+    }
+
+    public void setProfileLocation(String profileLocation) {
+        this.profileLocation = profileLocation;
+    }
 }
