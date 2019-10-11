@@ -20,9 +20,9 @@ public class UserService {
         return userRepo.findByUsernameAndPassword(username,password);
     }
 
-    public UserEntity isUserActive(String token) {
-        //return userRepo.findByToken(token);
-        return null;
+    public UserEntity isUserActive(UUID token) {
+        return userRepo.findByUserToken(token);
+        //return null;
     }
 
     public void saveDataInToDatabase(Map<String ,?> input) {
@@ -48,4 +48,5 @@ public class UserService {
     public UserEntity saveToken(UserEntity userEntity){
         return userRepo.save(userEntity);
     }
+
 }
