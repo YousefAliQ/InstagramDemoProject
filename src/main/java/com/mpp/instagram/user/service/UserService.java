@@ -4,9 +4,7 @@ import com.mpp.instagram.user.entity.UserEntity;
 import com.mpp.instagram.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,4 +39,5 @@ public class UserService {
          UserEntity user=userRepo.findByUsername(username);
         return user;
     }
+
 }
