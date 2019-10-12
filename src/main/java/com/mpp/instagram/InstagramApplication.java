@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -20,12 +22,21 @@ import java.util.Collections;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableConfigurationProperties({StorageProperties.class})
 @EnableSwagger2
-@CrossOrigin (origins = "*")
+@CrossOrigin (origins = "http://localhost:3000", maxAge = 3600)
 public class InstagramApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(InstagramApplication.class, args);
     }
+
+//    public WebMvcConfigurer corsConfigurer() {
+////        return new WebMvcConfigurer() {
+////            @Override
+////            public void addCorsMappings(CorsRegistry registry) {
+////                registry.addMapping("/signin").allowedOrigins("http://172.19.144.224:3000");
+////            }
+////        };
+////    }
 
     @Bean
     CommandLineRunner init(StorageService storageService) {

@@ -45,6 +45,12 @@ public class UserService {
         return user;
     }
 
+    public UserEntity findByEmail(String email) {
+        UserEntity user=userRepo.findByEmail(email);
+        return user;
+    }
+
+
     public UserEntity saveToken(UserEntity userEntity){
         return userRepo.save(userEntity);
     }

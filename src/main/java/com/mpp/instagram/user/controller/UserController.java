@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
-public class UserController {
+public class UserController  {
 
     @Autowired
     UserService userService;
@@ -36,23 +37,30 @@ public class UserController {
             notes = "Look up for the username. If it already exists then Send back as a failure otherwise insert the user record in database",
             response = Json.class)
     public Map<String, String> signUpUser(@RequestBody Map<String, ?> input) {
+
+        HashMap<String, String> map;
+        map = (HashMap<String, String>) input.get("signup");
+
         Map<String, String> result = new HashMap<>();
         try {
             //LookUp Username In Database if it already exists
-            UserEntity userexist = userService.findByUsername((String) input.get("username"));
-            if (userexist == null) {
-                userService.saveDataInToDatabase(input);
+            UserEntity usernaemExist = userService.findByUsername((String) map.get("username"));
+            UserEntity emailExist = userService.findByEmail((String) map.get("email"));
+            if (usernaemExist == null && emailExist == null) {
+                userService.saveDataInToDatabase(map);
                 result.put("Result", "Success");
-                result.put("userexist", "false");
+                result.put("Massege", "Cool, try to login now!");
+                //result.put("token","asdfsdf");
             } else {
                 result.put("Result", "Fail");
-                result.put("userexist", "true");
+                result.put("Massege", "Username or Email is already taken!");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return result;
     }
+
 
     @RequestMapping(method = RequestMethod.POST, value = "/signin", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "For Signing In the User",
@@ -118,6 +126,8 @@ public class UserController {
 
             if (!timeStamp.before(new Date())) { // token expire after an hour if the user is not active.
                 result.put("Result", "valid");
+                result.put("username", isActive.getUsername());
+
             } else {
                 result.put("Result", "invalid");
             }
@@ -126,8 +136,6 @@ public class UserController {
         }
 
         return result;
-
-
     }
 
 
