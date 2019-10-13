@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 public class UserController  {
 
@@ -69,9 +69,10 @@ public class UserController  {
     public Map<String, String> signInUser(@RequestBody Map<String, ?> input) {
         Map<String, String> result = new HashMap<>();
         try {
-            HashMap<String, String> map;
-            map = (HashMap<String, String>) input.get("login");
-            UserEntity isValid = userService.isUserValid((String) map.get("username"), (String) map.get("password"));
+            Map<String, String> map = new HashMap<>();
+            input = (Map<String, ?>) input.get("login");
+
+            UserEntity isValid = userService.isUserValid((String) input.get("username"), (String) input.get("password"));
             if (isValid != null) {
 
                 UUID generatedToken = UUID.randomUUID();
@@ -109,16 +110,16 @@ public class UserController  {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, value = "/checkToken", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "For authentication the Users' sessions",
-            notes = "Look up for the token. If it matches the database then returns valid otherwise returns invalid. ",
-            response = Json.class)
+//    @RequestMapping(method = RequestMethod.POST, value = "/checkToken", consumes = "application/json", produces = "application/json")
+//    @ApiOperation(value = "For authentication the Users' sessions",
+//            notes = "Look up for the token. If it matches the database then returns valid otherwise returns invalid. ",
+//            response = Json.class)
 
-    public Map<String, String> checkToken(@RequestBody Map<String, ?> input) {
+    public Map<String, String> checkToken(String input) {
         Map<String, String> result = new HashMap<>();
         try {
 
-            UserEntity isActive = userService.isUserActive(UUID.fromString(input.get("token").toString()));
+            UserEntity isActive = userService.isUserActive(UUID.fromString(input));
             LocalDate localDate = LocalDate.fromMillisSinceEpoch(isActive.getToken_timestamp().getMillisSinceEpoch());
 
             GregorianCalendar timeStamp = new GregorianCalendar();

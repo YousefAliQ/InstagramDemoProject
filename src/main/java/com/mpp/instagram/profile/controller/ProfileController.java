@@ -2,6 +2,7 @@ package com.mpp.instagram.profile.controller;
 
 import com.mpp.instagram.profile.entity.ProfileEntity;
 import com.mpp.instagram.profile.services.ProfileServices;
+import com.mpp.instagram.storage.StorageService;
 import com.mpp.instagram.user.controller.UserController;
 import com.mpp.instagram.user.entity.UserEntity;
 import com.mpp.instagram.user.service.UserService;
@@ -17,12 +18,16 @@ import springfox.documentation.spring.web.json.Json;
 
 //import javax.jnlp.FileContents;
 import javax.swing.text.html.parser.Parser;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 
 //@RestController
 public class ProfileController {
+
+    @Autowired
+    StorageService storageService;
 
     @Autowired
     ProfileServices profileServices;
@@ -36,7 +41,7 @@ public class ProfileController {
         try {
 
             UserController userController = new UserController();
-            Map<String, ?> user = userController.checkToken(input);
+            Map<String, ?> user = userController.checkToken(input.get("email").toString());
             // check user auth.
             if (user.get("Result").equals("valid")){
                 // get image details
@@ -61,7 +66,7 @@ public class ProfileController {
         Map<String, String> result = new HashMap<>();
         try {
             UserController userController = new UserController();
-            Map<String, ?> user = userController.checkToken(input);
+            Map<String, ?> user = userController.checkToken(input.get("email").toString());
             // check user auth.
             if (user.get("Result").equals("valid")){
                 // get posts related to the user.
@@ -87,7 +92,7 @@ public class ProfileController {
         try {
 
             UserController userController = new UserController();
-            Map<String, ?> user = userController.checkToken(input);
+            Map<String, ?> user = userController.checkToken(input.get("email").toString());
             // check user auth.
             if (user.get("Result").equals("valid")){
                 // get user profile.
@@ -113,7 +118,7 @@ public class ProfileController {
         try {
 
             UserController userController = new UserController();
-            Map<String, ?> user = userController.checkToken(input);
+            Map<String, ?> user = userController.checkToken(input.get("emial").toString());
             // check user auth.
             if (user.get("Result").equals("valid")){
                 // set user profile information.
@@ -140,6 +145,37 @@ public class ProfileController {
         }
         return result;
     }
+
+
+
+    @RequestMapping(method = RequestMethod.POST, value = "profile/setProfileBio", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "For sitting the user's profile information",
+            notes = "Look up for the authenticated username and set bio, number of posts, followers, and following.",
+            response = Json.class)
+    public Map<String, String> getPosts(@RequestBody Map<String, ?> input) {
+
+        Map<String, String> result = new HashMap<>();
+        try {
+
+            UserController userController = new UserController();
+            Map<String, ?> user = userController.checkToken(input.get("token").toString());
+            // check user auth.
+            if (user.get("Result").equals("valid")){
+                // set user profile information.
+
+                ArrayList<String> posts = new ArrayList<>();
+                storageService.getUserPosts(user.get("username").toString()).forEach(posts::add);
+
+                result.put("posts",posts.toString());
+            }else{
+                result.put("Result", "invalid");
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
 
 
     //@RequestMapping(method = RequestMethod.POST, value = "/getCounters", consumes = "application/json", produces = "application/json")

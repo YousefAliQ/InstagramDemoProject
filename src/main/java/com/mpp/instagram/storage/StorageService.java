@@ -4,6 +4,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Stream;
 
 public interface StorageService {
@@ -19,6 +21,10 @@ public interface StorageService {
     Path load(String filename, String location);
 
     Resource loadAsResource(String filename, String location);
+
+    void addPostEntity(Long id, String desc, LocalDateTime uploadDate, String username);
+
+    List<String> getUserPosts(String username);
 
     void deleteAll();
 
