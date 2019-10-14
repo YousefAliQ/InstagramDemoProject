@@ -93,7 +93,8 @@ public class UserController  {
         return result;
     }
 
-    private UserEntity saveToken(UserEntity input, UUID generatedToken) {
+
+    public UserEntity saveToken(UserEntity input, UUID generatedToken) {
 
         Date date = new Date();
 

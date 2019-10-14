@@ -2,6 +2,7 @@ package com.mpp.instagram.profile.controller;
 
 import com.mpp.instagram.profile.entity.ProfileEntity;
 import com.mpp.instagram.profile.services.ProfileServices;
+import com.mpp.instagram.storage.PostEntity;
 import com.mpp.instagram.storage.StorageService;
 import com.mpp.instagram.user.controller.UserController;
 import com.mpp.instagram.user.entity.UserEntity;
@@ -18,10 +19,7 @@ import springfox.documentation.spring.web.json.Json;
 
 //import javax.jnlp.FileContents;
 import javax.swing.text.html.parser.Parser;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 //@RestController
 public class ProfileController {
@@ -148,7 +146,7 @@ public class ProfileController {
 
 
 
-    @RequestMapping(method = RequestMethod.POST, value = "profile/setProfileBio", consumes = "application/json", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = "profile/getposts", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "For sitting the user's profile information",
             notes = "Look up for the authenticated username and set bio, number of posts, followers, and following.",
             response = Json.class)
@@ -163,7 +161,7 @@ public class ProfileController {
             if (user.get("Result").equals("valid")){
                 // set user profile information.
 
-                ArrayList<String> posts = new ArrayList<>();
+                List<PostEntity> posts = new ArrayList<PostEntity>();
                 storageService.getUserPosts(user.get("username").toString()).forEach(posts::add);
 
                 result.put("posts",posts.toString());
