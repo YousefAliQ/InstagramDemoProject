@@ -6,13 +6,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 //import com.mpp.instagram.storage.PostEntity;
+import com.mpp.instagram.storage.PostEntity;
 import com.mpp.instagram.storage.StorageFileNotFoundException;
 import com.mpp.instagram.storage.StorageRepository;
 import com.mpp.instagram.storage.StorageService;
+import com.mpp.instagram.user.controller.UserController;
 import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,10 +26,10 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Controller
+@RestController
 public class FileUploadController {
 
-    @Autowired
+    //@Autowired
     private final StorageService storageService;
     //storage repository created
     @Autowired
@@ -47,15 +51,18 @@ public class FileUploadController {
     }
 
     //Fetching all the data from database
-    @RequestMapping(method = RequestMethod.POST, value = "/getpost",produces = "application/json", consumes = "application/json")
-    public String showAllData(@RequestBody Map<String, ?> input) {
-        List<String> posts = new ArrayList<>();
-        storageService.getUserPosts(input.get("username").toString()).forEach(posts::add);
-        //List<PostEntity> data = new ArrayList<>();
-        //storageRepository.findAll().forEach(data::add);
-        //return "data";//data.toString();
-        return posts.toString();
-    }
+//       @RequestMapping(method = RequestMethod.POST, value = "/getpost",produces = "application/json", consumes = "application/json")
+//    public String showAllData(@RequestBody Map<String, ?> input) {
+//        List<String> posts = new ArrayList<>();
+//        if (input.get("login") != null){
+//            input = ( Map<String, ?>) input.get("login");
+//        }
+//        storageService.getUserPosts(input.get("username").toString()).forEach(posts::add);
+//        //List<PostEntity> data = new ArrayList<>();
+//        //storageRepository.findAll().forEach(data::add);
+//        //return "data";//data.toString();
+//        return posts.toString();
+//    }
 
     //End
 
@@ -97,6 +104,29 @@ public class FileUploadController {
         Resource file = storageService.loadAsResource(filename, location);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @CrossOrigin (origins = "*", maxAge = 3600)
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadFile(@RequestParam("image") MultipartFile files , @RequestParam("token") String token, @RequestParam("body") String description) { //
+
+        System.out.println("token" + token);
+        System.out.println("desc" + description);
+        String location = "post";
+        String url = null;
+        UserController userController = new UserController();
+        Map<String, String> user = userController.checkToken(token);
+        url = storageService.storeMultipleFiles(files, location);
+        /*for (int i = 0; i < files.length; i++) {
+            //logger.info(String.format("File name '%s' uploaded successfully.", files[i].getOriginalFilename()));
+            url = storageService.storeMultipleFiles(files[i], location);
+            url += ";";
+        }*/
+        Long id= UUID.randomUUID().getLeastSignificantBits() & Long.MAX_VALUE;
+        LocalDateTime uploadDate = LocalDateTime.now();
+        String username = user.get("username").toString();
+        PostEntity post = storageService.addFullPostEntity(id, description, uploadDate, username, url);
+        return new ResponseEntity<>(post , HttpStatus.OK);
     }
 
     @PostMapping("/uploadpost")

@@ -1,7 +1,6 @@
 package com.mpp.instagram.post.controller;
 
-import com.mpp.instagram.post.entity.PostEntity;
-import com.mpp.instagram.profile.entity.ProfileEntity;
+import com.mpp.instagram.storage.PostEntity;
 import com.mpp.instagram.user.controller.UserController;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;

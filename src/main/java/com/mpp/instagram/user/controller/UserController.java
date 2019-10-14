@@ -18,9 +18,12 @@ public class UserController  {
 
     @Autowired
     UserService userService;
-
+   public UserController()
+   {
+       userService=new UserService();
+   }
     // New Get Code Functionality
-    @RequestMapping("/signup")
+    @RequestMapping("/showall")
     public List<UserEntity> getRequestFromSignUp() {
         List<UserEntity> getAllData = userService.listAll(); //Getting all the data from the database
         return getAllData;

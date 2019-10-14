@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.mpp.instagram.post.entity.PostEntity;
-import com.mpp.instagram.post.service.PostServices;
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -73,6 +70,39 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public String storeMultipleFiles(MultipartFile file, String location) {
+        String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        String post_link;
+        try {
+            if (file.isEmpty()) {
+                throw new StorageException("Failed to store empty file " + filename);
+            }
+            if (filename.contains("..")) {
+                // This is a security check
+                throw new StorageException(
+                        "Cannot store file with relative path outside current directory "
+                                + filename);
+            }
+            try (InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, this.rootLocation.resolve(filename),
+                        StandardCopyOption.REPLACE_EXISTING);
+                post_link = this.rootLocation + filename;
+            }
+        }
+        catch (IOException e) {
+            throw new StorageException("Failed to store file " + filename, e);
+        }
+        return post_link;
+    }
+
+    @Override
+    public PostEntity addFullPostEntity(Long id, String desc, LocalDateTime uploadDate, String username, String url) {
+        PostEntity post = new PostEntity(id, url, uploadDate, desc, username);
+        storageRepository.save(post);
+        return post;
+    }
+
+    @Override
     public void addPostEntity(Long id, String description, LocalDateTime date, String username) {
         //postUrl += "/"+id;
         PostEntity post = new PostEntity(id, postUrl, date, description, username);
@@ -80,14 +110,14 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public List<String> getUserPosts(String username) {
+    public List<PostEntity> getUserPosts(String username) {
         List<PostEntity> data = new ArrayList<>();
-        List<String> userPosts = new ArrayList<>();
-       // storageRepository.findByUsername(username).forEach(data::add);
-        for(PostEntity p: data) {
-            userPosts.add(p.getPostUrl());
-        }
-        return userPosts;
+        //List<String> userPosts = new ArrayList<>();
+       storageRepository.findByUsername(username).forEach(data::add);
+//        for(PostEntity p: data) {
+//            userPosts.add(p.getPostUrl());
+//        }
+        return data;
     }
 
     @Override
