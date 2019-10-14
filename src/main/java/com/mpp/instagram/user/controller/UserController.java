@@ -125,7 +125,6 @@ public class UserController  {
     public Map<String, String> checkToken(String input) {
         Map<String, String> result = new HashMap<>();
         try {
-
             UserEntity isActive = userService.isUserActive(UUID.fromString(input));
             LocalDate localDate = LocalDate.fromMillisSinceEpoch(isActive.getToken_timestamp().getMillisSinceEpoch());
 
