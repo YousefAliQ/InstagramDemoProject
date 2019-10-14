@@ -1,6 +1,6 @@
 package com.mpp.instagram.likes.entity;
 
-import com.mpp.instagram.post.entity.postEntity;
+//import com.mpp.instagram.post.entity.postEntity;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;

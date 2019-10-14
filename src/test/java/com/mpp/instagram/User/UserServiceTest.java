@@ -16,6 +16,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 
+import java.util.UUID;
+
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -62,10 +64,43 @@ public class UserServiceTest {
       UserEntity returnValue=userService.isUserValid("Adnan","1234567");
       Assert.assertNull(returnValue);
   }
-  //public void isUserActive45
+  @Test
+  public void isUserActive_CheckByToken()
+  {
+      UUID uuid=UUID.randomUUID();
+      UserEntity userEntity=new UserEntity("Adnan","AdnanShehzad","ashehzad@mum.edu","1234567");
+      when(userRepo.findByUserToken(uuid)).thenReturn(userEntity);
+      UserEntity returnvalue=userService.isUserActive(uuid);
+      Assert.assertNotNull(returnvalue);
+      verify(userRepo,times(1)).findByUserToken(uuid);
+      Assert.assertEquals(userEntity,returnvalue);
+  }
+    @Test
+    public void isUserActive_CheckByToken_IfNotExist()
+    {
+        UUID uuid=UUID.randomUUID();
+        when(userRepo.findByUserToken(uuid)).thenReturn(null);
+        UserEntity returnvalue=userService.isUserActive(uuid);
+        Assert.assertNull(returnvalue);
+        verify(userRepo,times(1)).findByUserToken(uuid);
+        Assert.assertEquals(null,returnvalue);
+    }
 
-
-
-
-
+    @Test
+    public void findByEmail_IFNotNull()
+    {
+        UserEntity userEntity=new UserEntity("Adnan","AdnanShehzad","ashehzad@mum.edu","1234567");
+        when(userRepo.findByEmail(anyString())).thenReturn(userEntity);
+        UserEntity returnvalue=userService.findByEmail("Adnan");
+        Assert.assertNotNull(returnvalue);
+        verify(userRepo,times(1)).findByEmail("Adnan");
+        Assert.assertEquals(userEntity,returnvalue);
+    }
+    @Test
+    public void findByEmail_IFNull()
+    {
+        when(userRepo.findByEmail(anyString())).thenReturn(null);
+        UserEntity returnValue=userService.findByEmail("Adnan");
+        Assert.assertNull(returnValue);
+    }
 }

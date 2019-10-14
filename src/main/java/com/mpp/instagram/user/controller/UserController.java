@@ -94,7 +94,7 @@ public class UserController  {
         }
         return result;
     }
-    private UserEntity saveToken(UserEntity input, UUID generatedToken) {
+    public UserEntity saveToken(UserEntity input, UUID generatedToken) {
 
         Date date = new Date();
 
@@ -109,23 +109,18 @@ public class UserController  {
         return userService.saveToken(input);
 
     }
-
-
 //    @RequestMapping(method = RequestMethod.POST, value = "/checkToken", consumes = "application/json", produces = "application/json")
 //    @ApiOperation(value = "For authentication the Users' sessions",
 //            notes = "Look up for the token. If it matches the database then returns valid otherwise returns invalid. ",
 //            response = Json.class)
-
     public Map<String, String> checkToken(String input) {
         Map<String, String> result = new HashMap<>();
         try {
-
             UserEntity isActive = userService.isUserActive(UUID.fromString(input));
             LocalDate localDate = LocalDate.fromMillisSinceEpoch(isActive.getToken_timestamp().getMillisSinceEpoch());
 
             GregorianCalendar timeStamp = new GregorianCalendar();
             timeStamp.setTimeInMillis(isActive.getToken_timestamp().getMillisSinceEpoch());
-
             if (!timeStamp.before(new Date())) { // token expire after an hour if the user is not active.
                 result.put("Result", "valid");
                 result.put("username", isActive.getUsername());
@@ -136,10 +131,8 @@ public class UserController  {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
         return result;
     }
-
 
 }
 
