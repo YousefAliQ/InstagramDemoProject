@@ -70,29 +70,30 @@ public class UserController  {
         Map<String, String> result = new HashMap<>();
         try {
             Map<String, String> map = new HashMap<>();
-            input = (Map<String, ?>) input.get("login");
-
-            UserEntity isValid = userService.isUserValid((String) input.get("username"), (String) input.get("password"));
+            map = (Map<String, String>) input.get("login");
+            UserEntity isValid = userService.isUserValid((String) map.get("username"), (String) map.get("password"));
             if (isValid != null) {
-
                 UUID generatedToken = UUID.randomUUID();
                 UserEntity entity = saveToken(isValid, generatedToken);
                 if (entity != null) {
-                    result.put("Result", "Success");
+                    result.put("Result", "success");
+                    result.put("username", entity.getUsername());
+                    result.put("fullname", entity.getFullname());
                     result.put("Token", generatedToken.toString());
+                    result.put("email", entity.getEmail());
+                    result.put("timestamp", entity.getToken_timestamp().toString());
                 } else {
                     result.put("Result", "Fail");
                 }
             } else {
                 result.put("Result", "Fail");
-
             }
         } catch (Exception ex) {
+            System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
         return result;
     }
-
     private UserEntity saveToken(UserEntity input, UUID generatedToken) {
 
         Date date = new Date();

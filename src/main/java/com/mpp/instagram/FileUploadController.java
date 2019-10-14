@@ -21,9 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 public class FileUploadController {
 
+    @Autowired
     private final StorageService storageService;
     //storage repository created
     @Autowired
@@ -110,12 +112,11 @@ public class FileUploadController {
 
     @PostMapping("/uploadprofile")
     public String handleProfileFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
+                                  RedirectAttributes redirectAttributes) {
         String location = "profile";
         storageService.store(file, location);
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
-
         return "redirect:/profile";
     }
 
