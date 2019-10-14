@@ -1,5 +1,12 @@
 package com.mpp.instagram.storage;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -11,14 +18,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -96,24 +95,23 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public PostEntity addFullPostEntity(Long id, String desc, LocalDateTime uploadDate, String username, String url) {
-        PostEntity post = new PostEntity(id, url, uploadDate, desc, username);
-        storageRepository.save(post);
-        return post;
-    }
-
-    @Override
     public void addPostEntity(Long id, String description, LocalDateTime date, String username) {
         //postUrl += "/"+id;
         PostEntity post = new PostEntity(id, postUrl, date, description, username);
-        //storageRepository.save(post);
+        storageRepository.save(post);
+    }
+
+    @Override
+    public void addFullPostEntity(Long id, String desc, LocalDateTime uploadDate, String username, String url) {
+        PostEntity post = new PostEntity(id, url, uploadDate, desc, username);
+        storageRepository.save(post);
     }
 
     @Override
     public List<PostEntity> getUserPosts(String username) {
         List<PostEntity> data = new ArrayList<>();
         //List<String> userPosts = new ArrayList<>();
-       storageRepository.findByUsername(username).forEach(data::add);
+        storageRepository.findByUsername(username).forEach(data::add);
 //        for(PostEntity p: data) {
 //            userPosts.add(p.getPostUrl());
 //        }
@@ -132,6 +130,43 @@ public class FileSystemStorageService implements StorageService {
         }
 
     }
+
+//    @Override
+//    public Integer getPostLikeCount(long postId) {
+//        PostEntity post = storageRepository.findById(postId).get();
+//        int likeCount = post.getLikeCount();
+//        return likeCount;
+//    }
+//
+//    @Override
+//    public Integer addLikeToPost(long postId) {
+//        PostEntity post = storageRepository.findById(postId).get();
+//        int likeCount = post.getLikeCount();
+//        likeCount++;
+//        post.setLikeCount(likeCount);
+//        return getPostLikeCount(postId);
+//    }
+//
+//    @Override
+//    public Integer deleteLikeFromPost (long postId) {
+//        PostEntity post = storageRepository.findById(postId).get();
+//        int likeCount = post.getLikeCount();
+//        likeCount--;
+//        post.setLikeCount(likeCount);
+//        return getPostLikeCount(postId);
+//    }
+
+//    @Override
+//    public Set<commentsEntity> getComments(long id) {
+//        PostEntity post = storageRepository.findById(id).get();
+//        Set<commentsEntity> comments = post.getComments();
+//        return comments;
+//    }
+//
+//    public void addComment(long id, Set<commentsEntity> comments) {
+//        PostEntity post = storageRepository.findById(id).get();
+//        post.setComments(comments);
+//    }
 
     //This is a test for both post and profile
     @Override
@@ -174,11 +209,11 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
-    public void deleteAll() {
-        FileSystemUtils.deleteRecursively(rootLocation.toFile());
-        FileSystemUtils.deleteRecursively(profileLocation.toFile());
-    }
+//    @Override
+//    public void deleteAll() {
+//        FileSystemUtils.deleteRecursively(rootLocation.toFile());
+//        FileSystemUtils.deleteRecursively(profileLocation.toFile());
+//    }
 
     @Override
     public void init() {

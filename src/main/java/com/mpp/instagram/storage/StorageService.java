@@ -26,10 +26,20 @@ public interface StorageService {
 
     void addPostEntity(Long id, String desc, LocalDateTime uploadDate, String username);
 
-    PostEntity addFullPostEntity(Long id, String desc, LocalDateTime uploadDate, String username, String ur);
+    void addFullPostEntity(Long id, String desc, LocalDateTime uploadDate, String username, String url);
 
     List<PostEntity> getUserPosts(String username);
 
-    void deleteAll();
+//    Integer getPostLikeCount(long postId);
+
+//    Integer addLikeToPost(long postId);
+
+//    Integer deleteLikeFromPost(long postId);
+
+//    Set<commentsEntity> getComments(long id);
+
+//    void addComment(long id, Set<commentsEntity> comment);
+
+//    void deleteAll();
 
 }

@@ -22,7 +22,7 @@ import java.util.Collections;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableConfigurationProperties({StorageProperties.class})
 @EnableSwagger2
-@CrossOrigin (origins = "*", maxAge = 3600)
+@CrossOrigin (origins = "172.19.144.188:8080", maxAge = 3600)
 public class InstagramApplication {
 
     public static void main(String[] args) {

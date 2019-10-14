@@ -23,7 +23,7 @@ public class UserController  {
        userService=new UserService();
    }
     // New Get Code Functionality
-    @RequestMapping("/showall")
+    @RequestMapping("/signup")
     public List<UserEntity> getRequestFromSignUp() {
         List<UserEntity> getAllData = userService.listAll(); //Getting all the data from the database
         return getAllData;
@@ -90,6 +90,7 @@ public class UserController  {
                 }
             } else {
                 result.put("Result", "Fail");
+
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -97,6 +98,8 @@ public class UserController  {
         }
         return result;
     }
+
+
     public UserEntity saveToken(UserEntity input, UUID generatedToken) {
 
         Date date = new Date();
