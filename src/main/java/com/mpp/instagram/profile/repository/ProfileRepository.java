@@ -6,9 +6,8 @@ import org.springframework.data.cassandra.repository.AllowFiltering;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-//@Repository
+@Repository
 public interface ProfileRepository extends CrudRepository<ProfileEntity, Long> {
-
-//    @AllowFiltering
-//    public ProfileEntity findByUsername(String username);
+    @AllowFiltering
+    public ProfileEntity findByUsername(String username);
 }

@@ -7,8 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
+import com.mpp.instagram.post.entity.PostEntity;
+import com.mpp.instagram.post.service.PostServices;
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -20,8 +26,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileSystemStorageService implements StorageService {
 
+    @Autowired
+    StorageRepository storageRepository;
+
     private final Path rootLocation;
     private final Path profileLocation;
+    private String postUrl;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -51,6 +61,7 @@ public class FileSystemStorageService implements StorageService {
                     if(location.equals("post")) {
                         Files.copy(inputStream, this.rootLocation.resolve(filename),
                                 StandardCopyOption.REPLACE_EXISTING);
+                        postUrl = this.rootLocation + filename;
                     }
                 }
             }
@@ -59,6 +70,24 @@ public class FileSystemStorageService implements StorageService {
             throw new StorageException("Failed to store file " + filename, e);
         }
 
+    }
+
+    @Override
+    public void addPostEntity(Long id, String description, LocalDateTime date, String username) {
+        //postUrl += "/"+id;
+        PostEntity post = new PostEntity(id, postUrl, date, description, username);
+        //storageRepository.save(post);
+    }
+
+    @Override
+    public List<String> getUserPosts(String username) {
+        List<PostEntity> data = new ArrayList<>();
+        List<String> userPosts = new ArrayList<>();
+       // storageRepository.findByUsername(username).forEach(data::add);
+        for(PostEntity p: data) {
+            userPosts.add(p.getPostUrl());
+        }
+        return userPosts;
     }
 
     @Override

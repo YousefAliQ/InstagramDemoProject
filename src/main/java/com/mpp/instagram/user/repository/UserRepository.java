@@ -17,4 +17,6 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     @AllowFiltering
     UserEntity findByUserToken(UUID token);
 
+    @AllowFiltering
+    UserEntity findByEmail(String email);
 }
