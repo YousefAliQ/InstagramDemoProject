@@ -19,20 +19,20 @@ public class UserController {
     UserService userService;
 
     // New Get Code Functionality
-    @RequestMapping("/signup")
-    public List<UserEntity> getRequestFromSignUp() {
-        List<UserEntity> getAllData = userService.listAll(); //Getting all the data from the database
-        return getAllData;
-    }
-
-    @RequestMapping("/signin")
-    public String getRequestFromSignIn() {
-        return "SignIn Page Hit";
-    }
+//    @RequestMapping("/signup")
+//    public List<UserEntity> getRequestFromSignUp() {
+//        List<UserEntity> getAllData = userService.listAll(); //Getting all the data from the database
+//        return getAllData;
+//    }
+//
+//    @RequestMapping("/signin")
+//    public String getRequestFromSignIn() {
+//        return "SignIn Page Hit";
+//    }
 
     /// Post Requests for SignIn and SignUp
     @RequestMapping(method = RequestMethod.POST, value = "/signup", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "For Signing Up the User",
+    @ApiOperation(value = "Signing Up the User",
             notes = "Look up for the username. If it already exists then Send back as a failure otherwise insert the user record in database",
             response = Json.class)
     public Map<String, String> signUpUser(@RequestBody Map<String, ?> input) {
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/signin", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "For Signing In the User",
+    @ApiOperation(value = " Signing In the User",
             notes = "Look up for the username and password. If both matches the database then establish a session and return a token otherwise return failure. ",
             response = Json.class)
     public Map<String, String> signInUser(@RequestBody Map<String, ?> input) {
@@ -126,8 +126,6 @@ public class UserController {
         }
 
         return result;
-
-
     }
 
 

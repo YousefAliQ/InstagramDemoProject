@@ -34,7 +34,6 @@ public class InstagramApplication {
             storageService.init();
         };
     }
-
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
