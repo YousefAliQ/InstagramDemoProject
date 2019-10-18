@@ -197,3 +197,17 @@ public class FileUploadController {
         return ResponseEntity.notFound().build();
     }
 }
+
+//Code for Renaming the file
+//
+//    // the file itself as created by the upload servlet
+//    String clientSideFileName = fileInfo.getFileName();
+//    File uploadedFile = fileInfo.getFile();
+//    File uploadDirectory = uploadedFile.getParentFile();
+//
+//    // now we want to rename the file in case the user tries to upload a
+//    // file with the same name (from another directory)
+//    UUID uuid = UUID.randomUUID();
+//    String newFileName = "XXXUpload-" + uuid.toString() + ".xml";
+//    File newFile = new File(uploadDirectory, newFileName);
+//             uploadedFile.renameTo(newFile);
