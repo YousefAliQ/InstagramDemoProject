@@ -139,25 +139,16 @@ public class FileUploadController {
             response = Json.class)
     public ResponseEntity uploadPost(@ModelAttribute PostWrapper model, @RequestHeader (name="Authorization") String token) {
 
-        //try {
-            System.out.println(model.toString());
-            //saveUploadedFile(model.getImage());
-            //formRepo.save(mode.getTitle(),model.getDescription()); //Save as you want as per requirement
-        //} catch (IOException e) {
-        //    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        //}
-
+        System.out.println(model.toString());
 
         String location = "post";
         String url = null;
         UserController userController = new UserController();
         UserEntity user = userService.isUserActive(UUID.fromString(token));
-        //for (int i = 0; i < files.length; i++) {
-            //logger.info(String.format("File name '%s' uploaded successfully.", files[i].getOriginalFilename()));
 
             url = storageService.storeMultipleFiles(model.getImage(), location);
             url += ";";
-        //}
+
         Long id= UUID.randomUUID().getLeastSignificantBits() & Long.MAX_VALUE;
         LocalDateTime uploadDate = LocalDateTime.now();
         storageService.addFullPostEntity(id, model.getDescription(), uploadDate, user.getUsername(), url);
@@ -185,7 +176,7 @@ public class FileUploadController {
              ) {
             temp = new PostReturnData();
             temp.setPost_id(post.getPost_id());
-            temp.setPostUrl(post.getPostUrl());
+            temp.setPostUrl(post.getPostUrl().replace("\\","/").replace("post",""));
             temp.setUploadDate(post.getUploadDate());
             retPosts.add(temp);
         }
