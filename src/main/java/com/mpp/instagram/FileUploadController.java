@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import springfox.documentation.spring.web.json.Json;
@@ -30,11 +31,14 @@ import springfox.documentation.spring.web.json.Json;
 @CrossOrigin(origins = "*")
 @RestController
 public class FileUploadController {
+
+
     private final StorageService storageService;
     private final UserService userService;
     //storage repository created
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private StorageRepository storageRepository;
     @Autowired
@@ -42,17 +46,24 @@ public class FileUploadController {
         this.storageService = storageService;
         this.userService = userService;
     }
+
     @GetMapping("/post")
     @ApiOperation(value = "For displaying all the posts",
             notes = "Look up in the posts database and loads the url for each post stored in the database",
             response = Json.class)
     public String listPostUploadedFiles(Model model) throws IOException {
+
         model.addAttribute("files", storageService.loadAllPost().map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFilePost", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
+
         return "uploadPost";
     }
+
+    //@GetMapping("/home")
+   // public
+
     //Fetching all the data from database
     @RequestMapping(method = RequestMethod.POST, value = "/getpost",produces = "application/json", consumes = "application/json")
     public Map<String, String> showAllData(@RequestBody Map<String, ?> input) {
@@ -65,6 +76,9 @@ public class FileUploadController {
         result.put("posts", posts.toString());
         return result;
     }
+
+    //End
+
     @PostMapping(value = "/postdescription" , produces = "application/json" ,consumes = "application/json")
     @ApiOperation(value = "For displaying all the posts",
             notes = "Look up in the database and gets the url for each post stored in the database",
@@ -78,18 +92,22 @@ public class FileUploadController {
         storageService.addPostEntity(id, description, uploadDate, username);
         return "redirect:/post";
     }
+
     /* This is just for testing both post and profile but its not needed for profile*/
     @GetMapping("/profile")
     @ApiOperation(value = "For displaying the profile photo",
             notes = "Look up in the profile database and loads the url for the current profile image stored in the database",
             response = Json.class)
     public String listProfileUploadedFiles(Model model) throws IOException {
+
         model.addAttribute("files", storageService.loadAllProfile().map(
                 path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
                         "serveFileProfile", path.getFileName().toString()).build().toString())
                 .collect(Collectors.toList()));
+
         return "uploadProfile";
     }
+
     @GetMapping("/files/post/{filename:.+}")
     @ResponseBody
     @ApiOperation(value = "For loading the posts",
@@ -101,6 +119,7 @@ public class FileUploadController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
+
     @GetMapping("/files/profile/{filename:.+}")
     //@ResponseBody
     @ApiOperation(value = "For loading the profile",
@@ -112,28 +131,24 @@ public class FileUploadController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
+
+    // by Yousef Ali
     @PostMapping(value = "/uploadPost", consumes = {"application/json", "multipart/form-data" } , produces = "application/json")
     @ApiOperation(value = "For uploading the posts",
             notes = "Handles the storage of the posts in the directory and creates the url to be stored in the database",
             response = Json.class)
-    public ResponseEntity uploadPost(@ModelAttribute PostWrapper model, @RequestHeader (name="Authorization") String token)
-    {
-        //try {
-            System.out.println(model.toString());
-            //saveUploadedFile(model.getImage());
-            //formRepo.save(mode.getTitle(),model.getDescription()); //Save as you want as per requirement
-        //} catch (IOException e) {
-        //    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        //}
+    public ResponseEntity uploadPost(@ModelAttribute PostWrapper model, @RequestHeader (name="Authorization") String token) {
+
+        System.out.println(model.toString());
+
         String location = "post";
         String url = null;
         UserController userController = new UserController();
         UserEntity user = userService.isUserActive(UUID.fromString(token));
-        //for (int i = 0; i < files.length; i++) {
-            //logger.info(String.format("File name '%s' uploaded successfully.", files[i].getOriginalFilename()));
+
             url = storageService.storeMultipleFiles(model.getImage(), location);
             url += ";";
-        //}
+
         Long id= UUID.randomUUID().getLeastSignificantBits() & Long.MAX_VALUE;
         LocalDateTime uploadDate = LocalDateTime.now();
         storageService.addFullPostEntity(id, model.getDescription(), uploadDate, user.getUsername(), url);
@@ -141,6 +156,9 @@ public class FileUploadController {
 
         //return new ResponseEntity("Successfully uploaded!", HttpStatus.OK);
     }
+
+
+    // by Yousef Ali
     @PostMapping(value = "/refreshProfilePosts", produces = "application/json")
     @ApiOperation(value = "For refresh the posts at the client side",
             notes = "Handles the storage of the posts in the directory and creates the url to be stored in the database",
@@ -150,6 +168,7 @@ public class FileUploadController {
         String location = "post";
         String url = null;
         UserEntity user = userService.isUserActive(UUID.fromString(token));
+
         List<PostEntity> posts = storageService.getUserPosts(user.getUsername());
         List<PostReturnData> retPosts = new ArrayList<>();
         PostReturnData temp = new PostReturnData();
@@ -157,7 +176,7 @@ public class FileUploadController {
              ) {
             temp = new PostReturnData();
             temp.setPost_id(post.getPost_id());
-            temp.setPostUrl(post.getPostUrl());
+            temp.setPostUrl(post.getPostUrl().replace("\\","/").replace("post",""));
             temp.setUploadDate(post.getUploadDate());
             retPosts.add(temp);
         }
@@ -178,6 +197,7 @@ public class FileUploadController {
         //return "redirect:/post";
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/uploadprofile")
     @ApiOperation(value = "For uploading the profile",
             notes = "Handles the storage of the profile in the directory and creates the url to be stored in the database",
@@ -188,6 +208,7 @@ public class FileUploadController {
         storageService.store(file, location);
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
+
         //return "redirect:/profile";
         return ResponseEntity.ok().build();
     }
@@ -196,6 +217,7 @@ public class FileUploadController {
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();
     }
+
 }
 
 //Code for Renaming the file

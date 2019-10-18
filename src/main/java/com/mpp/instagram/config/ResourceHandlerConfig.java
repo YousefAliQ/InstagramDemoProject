@@ -11,6 +11,7 @@ public class ResourceHandlerConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
                 .addResourceHandler("/upload-dir/**")
-                .addResourceLocations("file:///C://Users//INNOVATION//Documents//GitHub//mppInstagramProjectRepro//upload-dir//post//");
+
+                .addResourceLocations("file:///C://Users//Yusuf//mppInstagramProjectRepro//upload-dir//post//");
     }
 }
