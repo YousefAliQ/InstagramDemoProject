@@ -29,7 +29,6 @@ public interface StorageService {
     void addFullPostEntity(Long id, String desc, LocalDateTime uploadDate, String username, String url);
 
     List<PostEntity> getUserPosts(String username);
-
 //    Integer getPostLikeCount(long postId);
 
 //    Integer addLikeToPost(long postId);
@@ -41,5 +40,4 @@ public interface StorageService {
 //    void addComment(long id, Set<commentsEntity> comment);
 
 //    void deleteAll();
-
 }
