@@ -5,19 +5,21 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.mpp.instagram.post.entity.PostReturnData;
+import com.mpp.instagram.post.entity.PostWrapper;
 import com.mpp.instagram.storage.PostEntity;
 import com.mpp.instagram.storage.StorageFileNotFoundException;
 import com.mpp.instagram.storage.StorageRepository;
 import com.mpp.instagram.storage.StorageService;
 import com.mpp.instagram.user.controller.UserController;
+import com.mpp.instagram.user.entity.UserEntity;
+import com.mpp.instagram.user.repository.UserRepository;
+import com.mpp.instagram.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,16 +27,23 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import springfox.documentation.spring.web.json.Json;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class FileUploadController {
 
+
     private final StorageService storageService;
+    private final UserService userService;
     //storage repository created
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private StorageRepository storageRepository;
     @Autowired
-    public FileUploadController(StorageService storageService) {
+    public FileUploadController(StorageService storageService, UserService userService) {
         this.storageService = storageService;
+        this.userService = userService;
     }
 
     @GetMapping("/post")
@@ -122,29 +131,65 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/uploadPost", consumes = {"application/json", "multipart/form-data" } , produces = "application/json")
     @ApiOperation(value = "For uploading the posts",
             notes = "Handles the storage of the posts in the directory and creates the url to be stored in the database",
             response = Json.class)
-    public ResponseEntity uploadFile(@RequestParam MultipartFile[] files, @RequestPart("0") String token, @RequestPart("1") String description) {
+    public ResponseEntity uploadPost(@ModelAttribute PostWrapper model, @RequestHeader (name="Authorization") String token) {
+
+        //try {
+            System.out.println(model.toString());
+            //saveUploadedFile(model.getImage());
+            //formRepo.save(mode.getTitle(),model.getDescription()); //Save as you want as per requirement
+        //} catch (IOException e) {
+        //    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        //}
+
+
         String location = "post";
         String url = null;
         UserController userController = new UserController();
-        Map<String, String> user = userController.checkToken(token);
-        for (int i = 0; i < files.length; i++) {
+        UserEntity user = userService.isUserActive(UUID.fromString(token));
+        //for (int i = 0; i < files.length; i++) {
             //logger.info(String.format("File name '%s' uploaded successfully.", files[i].getOriginalFilename()));
-            url = storageService.storeMultipleFiles(files[i], location);
+            url = storageService.storeMultipleFiles(model.getImage(), location);
             url += ";";
-        }
+        //}
         Long id= UUID.randomUUID().getLeastSignificantBits() & Long.MAX_VALUE;
         LocalDateTime uploadDate = LocalDateTime.now();
-        String username = user.get("username").toString();
-        storageService.addFullPostEntity(id, description, uploadDate, username, url);
+        storageService.addFullPostEntity(id, model.getDescription(), uploadDate, user.getUsername(), url);
         return ResponseEntity.ok().build();
+
+        //return new ResponseEntity("Successfully uploaded!", HttpStatus.OK);
     }
 
-    @PostMapping("/uploadpost")
-    @ApiOperation(value = "For uploading the posts",
+
+    @PostMapping(value = "/refreshProfilePosts", produces = "application/json")
+    @ApiOperation(value = "For refresh the posts at the client side",
+            notes = "Handles the storage of the posts in the directory and creates the url to be stored in the database",
+            response = Json.class)
+    public List<PostReturnData> refreshProfilePosts(@RequestHeader (name="Authorization") String token) {
+
+        String location = "post";
+        String url = null;
+        UserEntity user = userService.isUserActive(UUID.fromString(token));
+
+        List<PostEntity> posts = storageService.getUserPosts(user.getUsername());
+        List<PostReturnData> retPosts = new ArrayList<>();
+        PostReturnData temp = new PostReturnData();
+        for (PostEntity post: posts
+             ) {
+            temp = new PostReturnData();
+            temp.setPost_id(post.getPost_id());
+            temp.setPostUrl(post.getPostUrl());
+            temp.setUploadDate(post.getUploadDate());
+            retPosts.add(temp);
+        }
+        return retPosts;
+    }
+
+    @PostMapping("/sdf")
+    @ApiOperation(value = "For refresh the posts at the client side",
             notes = "Handles the storage of the posts in the directory and creates the url to be stored in the database",
             response = Json.class)
     public ResponseEntity handlePostFileUpload(@RequestParam("file") MultipartFile file,

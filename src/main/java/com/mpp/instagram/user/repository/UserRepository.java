@@ -1,6 +1,7 @@
 package com.mpp.instagram.user.repository;
 
 import com.mpp.instagram.user.entity.UserEntity;
+import org.apache.tomcat.jni.User;
 import org.springframework.data.cassandra.repository.AllowFiltering;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,9 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
     UserEntity findByUsername(String username);
 
     @AllowFiltering
-    UserEntity findByUserToken(UUID token);
+    public UserEntity findByUserToken(UUID token);
+
+
 
     @AllowFiltering
     UserEntity findByEmail(String email);
