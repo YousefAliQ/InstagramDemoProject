@@ -2,6 +2,7 @@ package com.mpp.instagram.profile.controller;
 
 import com.mpp.instagram.profile.entity.ProfileEntity;
 import com.mpp.instagram.profile.services.ProfileServices;
+import com.mpp.instagram.storage.PostEntity;
 import com.mpp.instagram.storage.StorageService;
 import com.mpp.instagram.user.controller.UserController;
 import com.mpp.instagram.user.entity.UserEntity;
@@ -10,20 +11,14 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
 
 //import javax.jnlp.FileContents;
 import javax.swing.text.html.parser.Parser;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-//@RestController
+@RestController
 public class ProfileController {
 
     @Autowired
@@ -58,6 +53,7 @@ public class ProfileController {
     }
 
 
+    @CrossOrigin(origins = "*", maxAge = 3600)
     @RequestMapping(method = RequestMethod.POST, value = "profile/getProfilePosts", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "For Getting the User Posts inside of the profile",
             notes = "Look up for the authenticated username and return the all posts related to specific user.",
@@ -66,9 +62,19 @@ public class ProfileController {
         Map<String, String> result = new HashMap<>();
         try {
             UserController userController = new UserController();
-            Map<String, ?> user = userController.checkToken(input.get("email").toString());
+            Map<String, ?> user = null;
+            if (input.get("email") != null)
+             user = userController.checkToken(input.get("email").toString());
+            if (input.get("login") != null){
+                input = ( Map<String, ?>) input.get("login");
+                user = userController.checkToken(input.get("username").toString());
+            }
+
             // check user auth.
             if (user.get("Result").equals("valid")){
+
+                List<PostEntity> retList = storageService.getUserPosts(input.get("email").toString());
+                result.put("data", "retList");
                 // get posts related to the user.
                 //FileController fileController = new FileController();
                 //String posts = fileController.getUserPosts(user.get("username"));
@@ -148,7 +154,8 @@ public class ProfileController {
 
 
 
-    @RequestMapping(method = RequestMethod.POST, value = "profile/setProfileBio", consumes = "application/json", produces = "application/json")
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    @RequestMapping(method = RequestMethod.POST, value = "/profile/getPosts", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "For sitting the user's profile information",
             notes = "Look up for the authenticated username and set bio, number of posts, followers, and following.",
             response = Json.class)
@@ -156,14 +163,14 @@ public class ProfileController {
 
         Map<String, String> result = new HashMap<>();
         try {
-
+//            Map<String, String> map = new HashMap<>();
+//            map = (Map<String, String>) input.get("token");
             UserController userController = new UserController();
-            Map<String, ?> user = userController.checkToken(input.get("token").toString());
+            Map<String, String> user = userController.checkToken(input.get("token").toString());
             // check user auth.
             if (user.get("Result").equals("valid")){
                 // set user profile information.
-
-                ArrayList<String> posts = new ArrayList<>();
+                ArrayList<PostEntity> posts = new ArrayList<>();
                 storageService.getUserPosts(user.get("username").toString()).forEach(posts::add);
 
                 result.put("posts",posts.toString());

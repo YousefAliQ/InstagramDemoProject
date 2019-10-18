@@ -1,4 +1,7 @@
 package com.mpp.instagram.comments.repository;
 
-public interface commentsRepository {
+import com.mpp.instagram.comments.entity.commentsEntity;
+import org.springframework.data.repository.CrudRepository;
+
+public interface commentsRepository extends CrudRepository<commentsEntity, Long> {
 }

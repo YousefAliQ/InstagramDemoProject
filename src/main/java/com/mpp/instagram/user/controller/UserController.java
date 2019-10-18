@@ -5,7 +5,9 @@ import com.mpp.instagram.user.entity.UserEntity;
 import com.mpp.instagram.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import springfox.documentation.spring.web.json.Json;
 import java.util.*;
 import java.util.List;
@@ -18,22 +20,25 @@ public class UserController  {
 
     @Autowired
     UserService userService;
-
+   public UserController()
+   {
+       userService=new UserService();
+   }
     // New Get Code Functionality
-//    @RequestMapping("/signup")
-//    public List<UserEntity> getRequestFromSignUp() {
-//        List<UserEntity> getAllData = userService.listAll(); //Getting all the data from the database
-//        return getAllData;
-//    }
-//
-//    @RequestMapping("/signin")
-//    public String getRequestFromSignIn() {
-//        return "SignIn Page Hit";
-//    }
+    @RequestMapping("/signup")
+    public List<UserEntity> getRequestFromSignUp() {
+        List<UserEntity> getAllData = userService.listAll(); //Getting all the data from the database
+        return getAllData;
+    }
+
+    @RequestMapping("/signin")
+    public String getRequestFromSignIn() {
+        return "SignIn Page Hit";
+    }
 
     /// Post Requests for SignIn and SignUp
     @RequestMapping(method = RequestMethod.POST, value = "/signup", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "Signing Up the User",
+    @ApiOperation(value = "For Signing Up the User",
             notes = "Look up for the username. If it already exists then Send back as a failure otherwise insert the user record in database",
             response = Json.class)
     public Map<String, String> signUpUser(@RequestBody Map<String, ?> input) {
@@ -62,8 +67,10 @@ public class UserController  {
     }
 
 
+
+    @ExceptionHandler(Throwable.class)
     @RequestMapping(method = RequestMethod.POST, value = "/signin", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = " Signing In the User",
+    @ApiOperation(value = "For Signing In the User",
             notes = "Look up for the username and password. If both matches the database then establish a session and return a token otherwise return failure. ",
             response = Json.class)
     public Map<String, String> signInUser(@RequestBody Map<String, ?> input) {
@@ -71,7 +78,7 @@ public class UserController  {
         try {
             Map<String, String> map = new HashMap<>();
             map = (Map<String, String>) input.get("login");
-            UserEntity isValid = userService.isUserValid((String) map.get("username"), (String) map.get("password"));
+            UserEntity isValid = userService.isUserValid((String) input.get("username"), (String) input.get("password"));
             if (isValid != null) {
                 UUID generatedToken = UUID.randomUUID();
                 UserEntity entity = saveToken(isValid, generatedToken);
@@ -79,21 +86,36 @@ public class UserController  {
                     result.put("Result", "success");
                     result.put("username", entity.getUsername());
                     result.put("fullname", entity.getFullname());
-                    result.put("Token", generatedToken.toString());
+                    result.put("token", generatedToken.toString());
                     result.put("email", entity.getEmail());
                     result.put("timestamp", entity.getToken_timestamp().toString());
                 } else {
-                    result.put("Result", "Fail");
+
+                    // 500 - SERVER ERROR
+                    //result.put("status","201");
+                    //result.put("statusText", "Sorry dude, Unknown error. Try Again!");
+                    //throw new UserNotFoundException("id-" + id);
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
                 }
             } else {
-                result.put("Result", "Fail");
+                throw new UserNotFoundException();
+
+                // 401 - UNAUTHORIZED
+               /* result.put("status","201");
+                result.put("statusText", "Sorry dude, invalid username or password!");*/
             }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
+        } catch (Exception exc) {
+
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sorry dude, invalid username or password!", exc);
+//            Map<String, String> map = new HashMap<>();
+//            map.put("response", new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sorry dude, invalid username or password!", exc).toString());
+//            return map;
+
         }
         return result;
     }
+
+
     public UserEntity saveToken(UserEntity input, UUID generatedToken) {
 
         Date date = new Date();
@@ -109,10 +131,13 @@ public class UserController  {
         return userService.saveToken(input);
 
     }
+
+
 //    @RequestMapping(method = RequestMethod.POST, value = "/checkToken", consumes = "application/json", produces = "application/json")
 //    @ApiOperation(value = "For authentication the Users' sessions",
 //            notes = "Look up for the token. If it matches the database then returns valid otherwise returns invalid. ",
 //            response = Json.class)
+
     public Map<String, String> checkToken(String input) {
         Map<String, String> result = new HashMap<>();
         try {
@@ -121,6 +146,7 @@ public class UserController  {
 
             GregorianCalendar timeStamp = new GregorianCalendar();
             timeStamp.setTimeInMillis(isActive.getToken_timestamp().getMillisSinceEpoch());
+
             if (!timeStamp.before(new Date())) { // token expire after an hour if the user is not active.
                 result.put("Result", "valid");
                 result.put("username", isActive.getUsername());
@@ -131,8 +157,10 @@ public class UserController  {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
         return result;
     }
+
 
 }
 

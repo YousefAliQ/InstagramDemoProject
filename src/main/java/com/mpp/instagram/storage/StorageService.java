@@ -14,6 +14,8 @@ public interface StorageService {
 
     void store(MultipartFile file, String location);
 
+    String storeMultipleFiles(MultipartFile file, String location);
+
     Stream<Path> loadAllPost();
 
     Stream<Path> loadAllProfile();
@@ -24,8 +26,20 @@ public interface StorageService {
 
     void addPostEntity(Long id, String desc, LocalDateTime uploadDate, String username);
 
-    List<String> getUserPosts(String username);
+    void addFullPostEntity(Long id, String desc, LocalDateTime uploadDate, String username, String url);
 
-    void deleteAll();
+    List<PostEntity> getUserPosts(String username);
+
+//    Integer getPostLikeCount(long postId);
+
+//    Integer addLikeToPost(long postId);
+
+//    Integer deleteLikeFromPost(long postId);
+
+//    Set<commentsEntity> getComments(long id);
+
+//    void addComment(long id, Set<commentsEntity> comment);
+
+//    void deleteAll();
 
 }
