@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import springfox.documentation.spring.web.json.Json;
@@ -131,6 +132,7 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+    // by Yousef Ali
     @PostMapping(value = "/uploadPost", consumes = {"application/json", "multipart/form-data" } , produces = "application/json")
     @ApiOperation(value = "For uploading the posts",
             notes = "Handles the storage of the posts in the directory and creates the url to be stored in the database",
@@ -152,6 +154,7 @@ public class FileUploadController {
         UserEntity user = userService.isUserActive(UUID.fromString(token));
         //for (int i = 0; i < files.length; i++) {
             //logger.info(String.format("File name '%s' uploaded successfully.", files[i].getOriginalFilename()));
+
             url = storageService.storeMultipleFiles(model.getImage(), location);
             url += ";";
         //}
@@ -164,6 +167,7 @@ public class FileUploadController {
     }
 
 
+    // by Yousef Ali
     @PostMapping(value = "/refreshProfilePosts", produces = "application/json")
     @ApiOperation(value = "For refresh the posts at the client side",
             notes = "Handles the storage of the posts in the directory and creates the url to be stored in the database",
