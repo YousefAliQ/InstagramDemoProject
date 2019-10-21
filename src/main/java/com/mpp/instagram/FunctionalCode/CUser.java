@@ -1,5 +1,7 @@
 package com.mpp.instagram.FunctionalCode;
 
+import java.util.Objects;
+
 public class CUser {
     private String fname;
     private String lname;
@@ -7,6 +9,14 @@ public class CUser {
     private int noofposts;
     private Gender gender;
     private int nooflikes;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CUser)) return false;
+        CUser cUser = (CUser) o;
+        return getNoofposts() == cUser.getNoofposts();
+    }
 
     public CUser(String fname, String lname, int age, int noofposts, Gender gender, int nooflikes) {
         this.fname = fname;
