@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import springfox.documentation.spring.web.json.Json;
+
 import java.util.*;
 import java.util.List;
 import java.util.HashMap;
@@ -16,14 +17,15 @@ import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class UserController  {
+public class UserController {
 
     @Autowired
     UserService userService;
-   public UserController()
-   {
-       userService=new UserService();
-   }
+
+    public UserController() {
+        userService = new UserService();
+    }
+
     // New Get Code Functionality
     @RequestMapping("/signup")
     public List<UserEntity> getRequestFromSignUp() {
@@ -65,7 +67,6 @@ public class UserController  {
         }
         return result;
     }
-
 
 
     @ExceptionHandler(Throwable.class)
@@ -115,7 +116,6 @@ public class UserController  {
         return result;
     }
 
-
     public UserEntity saveToken(UserEntity input, UUID generatedToken) {
 
         Date date = new Date();
@@ -131,8 +131,6 @@ public class UserController  {
         return userService.saveToken(input);
 
     }
-
-
 //    @RequestMapping(method = RequestMethod.POST, value = "/checkToken", consumes = "application/json", produces = "application/json")
 //    @ApiOperation(value = "For authentication the Users' sessions",
 //            notes = "Look up for the token. If it matches the database then returns valid otherwise returns invalid. ",
