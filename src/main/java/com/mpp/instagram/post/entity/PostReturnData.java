@@ -9,18 +9,28 @@ public class PostReturnData {
 
     private String postUrl;
 
+    private String postDesc;
     private LocalDateTime uploadDate;
 
-    public PostReturnData(long post_id, String postUrl, LocalDateTime uploadDate) {
+    public PostReturnData(long post_id, String postUrl, String postDesc, LocalDateTime uploadDate) {
         this.post_id = post_id;
         this.postUrl = postUrl;
+        this.postDesc = postDesc;
         this.uploadDate = uploadDate;
     }
+
 
     public PostReturnData() {
 
     }
 
+    public String getPostDesc() {
+        return postDesc;
+    }
+
+    public void setPostDesc(String postDesc) {
+        this.postDesc = postDesc;
+    }
 
     public long getPost_id() {
         return post_id;
