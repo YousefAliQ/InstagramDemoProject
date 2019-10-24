@@ -1,7 +1,7 @@
 package com.mpp.instagram.comments.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.ManyToOne;
@@ -33,7 +33,7 @@ public class CommentsEntity {
     private List<likesEntity> likes;
 
     @Column("date_comment")
-    private Date dateComment;
+    private LocalDateTime dateComment;
 
 	public CommentsEntity(UserEntity user, PostEntity post, String description) {
 		super();
@@ -41,6 +41,14 @@ public class CommentsEntity {
 		this.post = post;
 		this.description = description;
 		this.likes = new ArrayList<>();
+	}
+	
+	public CommentsEntity(UserEntity user, PostEntity post, String description, LocalDateTime dateComment) {
+		super();
+		this.user = user;
+		this.post = post;
+		this.description = description;
+		this.dateComment = dateComment;
 	}
 
 	public CommentsEntity(UserEntity user, PostEntity post, String description, List<likesEntity> likes) {
@@ -91,8 +99,18 @@ public class CommentsEntity {
 		return Id;
 	}
 	
-	public Date getDateComment() {
+	public LocalDateTime getDateComment() {
 		return dateComment;
 	}
     
+	@Override
+	public boolean equals(Object obj) {
+		if(! (obj instanceof CommentsEntity)) return false;
+		
+		return ((CommentsEntity)obj).description.equals(this.description)
+				&& ((CommentsEntity)obj).dateComment.equals(this.dateComment)
+				&& ((CommentsEntity)obj).user.getUsername().equals(this.getUser().getUsername())
+				&& ((CommentsEntity)obj).post.getDescription().equals(this.post.getDescription());
+	}
+	
 }
