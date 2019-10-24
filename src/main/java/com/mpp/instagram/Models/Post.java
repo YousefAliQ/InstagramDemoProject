@@ -69,6 +69,9 @@ public class Post {
 
     public List<Likes> getLikes() { return likes; }
 
+    public int getLikesCount() { return likes.size(); }
+
+
     public void setLikes(List<Likes> likes) { this.likes = likes; }
 
     public List<Comments> getComments() { return comments; }

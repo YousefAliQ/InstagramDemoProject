@@ -1,6 +1,8 @@
 package com.mpp.instagram.FunctionalCode;
 
 
+import com.mpp.instagram.UserFunctionalCode.User.CUser;
+
 import java.util.Comparator;
 import java.util.Currency;
 import java.util.List;
@@ -15,7 +17,7 @@ public class UserFunctions {
                     .limit(k)
                     .collect(Collectors.toList());
 
-    public  static BiFunction<List<CUser>,Long,List<CUser>> findTopKUserWithMostPosts=(user,top)->
+    public  static BiFunction<List<CUser>,Long,List<CUser>> findTopKUserWithMostPosts=(user, top)->
             user.stream()
                     .sorted(Comparator.comparing(CUser::getNoofposts).reversed())
                     .limit(top)
