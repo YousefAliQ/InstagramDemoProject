@@ -49,6 +49,7 @@ public class ProfileFunctions {
                     .sum();
 
 
+
     public static BiFunction<List<Profile>, List<Profile>, List<Profile>> getFriends = (followings, followers) ->
             Stream.concat(
                     followers.stream().filter(followings::contains),
