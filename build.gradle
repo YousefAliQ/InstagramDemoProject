@@ -23,5 +23,8 @@ dependencies {
     implementation 'io.springfox:springfox-swagger-ui:2.9.1'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.0.0.RELEASE'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
+    testCompile group: 'com.pholser', name: 'junit-quickcheck-core', version: '0.9'
+    testCompile group: 'com.pholser', name: 'junit-quickcheck-generators', version: '0.9'
+    compile group: 'com.pholser', name: 'junit-quickcheck-guava', version: '0.9'
+    compile group: 'com.pholser', name: 'junit-quickcheck', version: '0.9', ext: 'pom'
 }
