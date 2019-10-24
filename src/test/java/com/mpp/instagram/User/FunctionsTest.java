@@ -1,14 +1,11 @@
 package com.mpp.instagram.User;
 
-import com.mpp.instagram.UserFunctionalCode.CUser;
-import com.mpp.instagram.UserFunctionalCode.Gender;
-import com.mpp.instagram.UserFunctionalCode.UserFunctions;
-import org.apache.catalina.User;
+import com.mpp.instagram.UserFunctionalCode.User.CUser;
+import com.mpp.instagram.UserFunctionalCode.User.Gender;
+import com.mpp.instagram.UserFunctionalCode.User.UserFunctions;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.*;
 
 import static junit.framework.TestCase.assertTrue;

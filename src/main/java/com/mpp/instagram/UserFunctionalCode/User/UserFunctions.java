@@ -1,4 +1,4 @@
-package com.mpp.instagram.UserFunctionalCode;
+package com.mpp.instagram.UserFunctionalCode.User;
 
 
 import java.time.LocalDateTime;
@@ -6,7 +6,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 

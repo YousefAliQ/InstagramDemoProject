@@ -1,4 +1,4 @@
-package com.mpp.instagram.UserFunctionalCode;
+package com.mpp.instagram.UserFunctionalCode.User;
 
 import java.time.LocalDateTime;
 
