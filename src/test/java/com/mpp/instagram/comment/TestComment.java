@@ -208,7 +208,7 @@ public class TestComment {
 		PostEntity post2 = new PostEntity(2, "url2", LocalDateTime.of(2019, 10, 20, 9, 50), "desc2", "Adnan");
 		
 		List<CommentsEntity> comments = new ArrayList<CommentsEntity>();
-		CommentsEntity com1 = new CommentsEntity(mickael, post1, "We all love Pizza", post1.getUploadDate().plusMinutes(5));
+		CommentsEntity com1 = new CommentsEntity(mickael, post1, "We all love Pizza. Let's eat some today ", post1.getUploadDate().plusMinutes(5));
 		CommentsEntity com2 = new CommentsEntity(adnan, post1, "The girl who seated next to me was so cute . I think I am in love with her. Kisses ", post1.getUploadDate().plusMinutes(10));
 		CommentsEntity com3 = new CommentsEntity(mickael, post1, "I am hungry", post1.getUploadDate().plusMinutes(15));
 		CommentsEntity com4 = new CommentsEntity(bubacar, post1, "I want to pass MPP!!", post1.getUploadDate().plusMinutes(20));
@@ -251,7 +251,7 @@ public class TestComment {
 		PostEntity post2 = new PostEntity(2, "url2", LocalDateTime.of(2019, 10, 20, 9, 50), "desc2", "Adnan");
 		
 		List<CommentsEntity> comments = new ArrayList<CommentsEntity>();
-		CommentsEntity com1 = new CommentsEntity(mickael, post1, "We all love Pizza", post1.getUploadDate().plusMinutes(5));
+		CommentsEntity com1 = new CommentsEntity(mickael, post1, "We all love Pizza. Let's eat some today ", post1.getUploadDate().plusMinutes(5));
 		CommentsEntity com2 = new CommentsEntity(adnan, post1, "The girl who seated next to me was so cute . I think I am in love with her. Kisses ", post1.getUploadDate().plusMinutes(10));
 		CommentsEntity com3 = new CommentsEntity(mickael, post1, "I am hungry", post1.getUploadDate().plusMinutes(15));
 		CommentsEntity com4 = new CommentsEntity(bubacar, post1, "I want to pass MPP!!", post1.getUploadDate().plusMinutes(20));
