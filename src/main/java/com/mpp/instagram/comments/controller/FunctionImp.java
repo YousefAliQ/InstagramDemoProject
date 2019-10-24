@@ -82,9 +82,9 @@ public class FunctionImp {
 	searchComments = (rawList , text) -> 
 		searchCommentsBetweenDate.apply(rawList, text, LocalDateTime.of(2000, 01, 1, 00, 00) , LocalDateTime.now(), 100);
 		
-	public static final TriFunction<List<CommentsEntity> , String , LocalDateTime , List<CommentsEntity>> 
-	searchCommentsByDate = (rawList , text , date) -> 
-		searchCommentsBetweenDate.apply(rawList, text, date, date, 100);
+//	public static final TriFunction<List<CommentsEntity> , String , LocalDateTime , List<CommentsEntity>> 
+//	searchCommentsByDate = (rawList , text , date) -> 
+//		searchCommentsBetweenDate.apply(rawList, text, date, date, 100);
 		
 	public static final Function<String[], HashMap<String , Integer>> 
 	wordsToMap = (entries) -> 
