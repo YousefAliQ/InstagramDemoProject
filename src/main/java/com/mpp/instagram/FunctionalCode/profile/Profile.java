@@ -1,6 +1,6 @@
 package com.mpp.instagram.FunctionalCode.profile;
 
-import com.mpp.instagram.FunctionalCode.Gender;
+import com.mpp.instagram.UserFunctionalCode.User.Gender;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,24 +11,17 @@ public class Profile<Private> {
     private String lname;
     private int age;
     private int noOfPosts;
-    private Gender gender;
     private int noOfLikes;
     private List<Session> sessions;
 
-    public Profile(String fname, String lname, int age, int noOfPosts, Gender gender, int noOfLikes, List<Session> sessions) {
+    public Profile(String fname, String lname, int age, int noOfPosts,  int noOfLikes, List<Session> sessions) {
         this.fname = fname;
         this.lname = lname;
         this.age = age;
         this.noOfPosts = noOfPosts;
-        this.gender = gender;
+
         this.noOfLikes = noOfLikes;
         this.sessions = sessions;
-    }
-
-    Gender getGender() { return gender; }
-
-     void setGender(Gender gender) {
-        this.gender = gender;
     }
 
     int getNoOfPosts() {
@@ -88,13 +81,13 @@ public class Profile<Private> {
                 getNoOfPosts() == cUser.getNoOfPosts() &&
                 getNoOfLikes() == cUser.getNoOfLikes() &&
                 Objects.equals(getFname(), cUser.getFname()) &&
-                Objects.equals(getLname(), cUser.getLname()) &&
-                getGender() == cUser.getGender();
+                Objects.equals(getLname(), cUser.getLname());
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getFname(), getLname(), getAge(), getNoOfPosts(), getGender(), getNoOfLikes());
+        return Objects.hash(getFname(), getLname(), getAge(), getNoOfPosts(), getNoOfLikes());
     }
 
     @Override
@@ -104,7 +97,6 @@ public class Profile<Private> {
                 ", lname='" + lname + '\'' +
                 ", age=" + age +
                 ", noOfPosts=" + noOfPosts +
-                ", gender=" + gender +
                 ", noOfLikes=" + noOfLikes +
                 ", sessions=" + sessions +
                 '}';

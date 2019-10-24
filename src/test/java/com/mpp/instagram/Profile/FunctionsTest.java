@@ -1,9 +1,9 @@
 package com.mpp.instagram.Profile;
 
-import com.mpp.instagram.FunctionalCode.Gender;
 import com.mpp.instagram.FunctionalCode.profile.Profile;
 import com.mpp.instagram.FunctionalCode.profile.ProfileFunctions;
 import com.mpp.instagram.FunctionalCode.profile.Session;
+import com.mpp.instagram.UserFunctionalCode.User.Gender;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -39,29 +39,29 @@ public class FunctionsTest {
 
 
         List<Profile> followings=new ArrayList<>(Arrays.asList(
-                new Profile("Sibtain","Tarar",23,10, Gender.MALE,10, longSession),
-                new Profile("Yousef","Khan",50,50, Gender.FEMALE,25, longSession ),
-                new Profile("Michael","Jordan",12,30, Gender.MALE,30, veryShortSession),
-                new Profile("Bubacarr","Ahmed",12,8, Gender.FEMALE,8, shortSession),
-                new Profile("Wicky","KHan",12,13, Gender.MALE,13, shortSession)
+                new Profile("Sibtain","Tarar",23,10, 10, longSession),
+                new Profile("Yousef","Khan",50,50, 25, longSession ),
+                new Profile("Michael","Jordan",12,30, 30, veryShortSession),
+                new Profile("Bubacarr","Ahmed",12,8,8, shortSession),
+                new Profile("Wicky","KHan",12,13, 13, shortSession)
         ));
 
         List<Profile> followers=new ArrayList<>(Arrays.asList(
-                new Profile("Adnan","Shehzad",12,15, Gender.MALE,15, shortSession),
-                new Profile("Sibtain","Tarar",23,10, Gender.MALE,10, longSession),
-                new Profile("Yousef","Khan",50,50, Gender.FEMALE,25, longSession),
-                new Profile("Michael","Jordan",12,30, Gender.MALE,30, veryShortSession),
-                new Profile("Bubacarr","Ahmed",12,8, Gender.FEMALE,8, shortSession)
+                new Profile("Adnan","Shehzad",12,15, 15, shortSession),
+                new Profile("Sibtain","Tarar",23,10, 10, longSession),
+                new Profile("Yousef","Khan",50,50, 25, longSession),
+                new Profile("Michael","Jordan",12,30, 30, veryShortSession),
+                new Profile("Bubacarr","Ahmed",12,8, 8, shortSession)
         ));
 
 
         Assert.assertEquals(Optional.of(3),ProfileFunctions.maxAllowedNumberOfFollowings.apply(followings,followers));
 
-        followings.add(new Profile("newUser","lastName",12,8, Gender.FEMALE,8, longSession));
+        followings.add(new Profile("newUser","lastName",12,8, 8, longSession));
 
         Assert.assertEquals(Optional.of(2),ProfileFunctions.maxAllowedNumberOfFollowings.apply(followings,followers));
 
-        followers.add(new Profile("newUser","lastName",12,8, Gender.FEMALE,8, longSession));
+        followers.add(new Profile("newUser","lastName",12,8, 8, longSession));
 
         Assert.assertEquals(Optional.of(4),ProfileFunctions.maxAllowedNumberOfFollowings.apply(followings,followers));
 
@@ -74,12 +74,12 @@ public class FunctionsTest {
 
         List<Profile> LowActiveUsers = new ArrayList<Profile>();
 
-        LowActiveUsers.add( new Profile("Michael","Jordan",12,30, Gender.MALE,30, veryShortSession));
+        LowActiveUsers.add( new Profile("Michael","Jordan",12,30, 30, veryShortSession));
 
         Assert.assertEquals(Optional.of(LowActiveUsers),ProfileFunctions.getLessActivekFriendsBySessions.apply(followings,followers,1));
 
-        LowActiveUsers.add( new Profile("Bubacarr","Ahmed",12,8, Gender.FEMALE,8, shortSession));
-        LowActiveUsers.add( new Profile("Sibtain","Tarar",23,10, Gender.MALE,10, longSession));
+        LowActiveUsers.add( new Profile("Bubacarr","Ahmed",12,8, 8, shortSession));
+        LowActiveUsers.add( new Profile("Sibtain","Tarar",23,10, 10, longSession));
 
         Assert.assertEquals(Optional.of(LowActiveUsers),ProfileFunctions.getLessActivekFriendsBySessions.apply(followings,followers,3));
 

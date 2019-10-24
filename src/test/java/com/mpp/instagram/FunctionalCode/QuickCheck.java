@@ -1,23 +1,5 @@
 package com.mpp.instagram.FunctionalCode;
 
-import com.mpp.instagram.FunctionalCode.CUser;
-import com.mpp.instagram.FunctionalCode.Gender;
-import com.mpp.instagram.FunctionalCode.profile.ProfileFunctions;
-import com.pholser.junit.quickcheck.From;
-import com.pholser.junit.quickcheck.Property;
-import com.pholser.junit.quickcheck.When;
-import com.pholser.junit.quickcheck.generator.Ctor;
-import com.pholser.junit.quickcheck.generator.InRange;
-import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import org.junit.Assert;
-import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeThat;
 

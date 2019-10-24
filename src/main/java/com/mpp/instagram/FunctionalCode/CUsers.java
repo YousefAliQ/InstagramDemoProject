@@ -1,6 +1,8 @@
 package com.mpp.instagram.FunctionalCode;
 
 import com.mpp.instagram.FunctionalCode.profile.ProfileFunctions;
+import com.mpp.instagram.UserFunctionalCode.User.CUser;
+import com.mpp.instagram.UserFunctionalCode.User.Gender;
 import com.pholser.junit.quickcheck.From;
 import com.pholser.junit.quickcheck.Property;
 import com.pholser.junit.quickcheck.generator.GenerationStatus;
@@ -14,9 +16,9 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
-public class CUsers extends Generator<CUser> {
+public class CUsers {//extends Generator<CUser> {
 
-    public String fname;
+   /* public String fname;
     public String lname;
     public int age;
     public int noofposts;
@@ -35,15 +37,15 @@ public class CUsers extends Generator<CUser> {
         return new CUser(
                 status.toString(), status.toString(), 12, r.nextInt(), Gender.FEMALE, r.nextInt()
         );
-    }
+    }*/
 }
 
 @RunWith(JUnitQuickcheck.class)
 class IdentificationProperties {
-    @Property(trials = 5)
+   /* @Property(trials = 5)
     private void shouldHold(@From(CUsers.class) List<CUser> followers, @From(CUsers.class) List<CUser> followings) {
         //assertEquals(Optional.of(-1), ProfileFunctions.maxAllowedNumberOfFollowings.apply(followers, followings));
 
-    }
+    }*/
 }
 

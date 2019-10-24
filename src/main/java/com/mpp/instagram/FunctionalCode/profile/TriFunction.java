@@ -1,7 +1,5 @@
 package com.mpp.instagram.FunctionalCode.profile;
 
-import com.mpp.instagram.FunctionalCode.CUser;
-
 import java.util.List;
 import java.util.Optional;
 
