@@ -3,6 +3,7 @@ package com.mpp.instagram.User;
 import com.mpp.instagram.FunctionalCode.CUser;
 import com.mpp.instagram.FunctionalCode.Gender;
 import com.mpp.instagram.FunctionalCode.UserFunctions;
+import com.mpp.instagram.FunctionalCode.profile.ProfileFunctions;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,6 +37,8 @@ public class FunctionsTest {
         ExpectedOutput.stream().
                 forEach(elem->System.out.println("Element is " + elem.getFname()));
         Assert.assertArrayEquals(new List[]{ExpectedOutput}, new List[]{output});
+
+
     }
 
 }
