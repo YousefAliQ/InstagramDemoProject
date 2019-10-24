@@ -232,9 +232,10 @@ public class TestComment {
 		List<CommentsEntity> actual = FunctionImp.searchCommentsBetweenDate.apply(comments, "love today heart" , LocalDateTime.of(2019, 10, 20, 00, 55), LocalDateTime.of(2019, 10, 20, 01, 30), 10 );
 		List<CommentsEntity> expected = new ArrayList<>();
 		expected.add(com6);
-		expected.add(com2);
 		expected.add(com1);
-		
+		expected.add(com2);
+
+
 		assertEquals(expected , actual);
 		
 	}
@@ -274,9 +275,9 @@ public class TestComment {
 		List<CommentsEntity> actual = FunctionImp.searchComments.apply(comments, "love today heart" );
 		List<CommentsEntity> expected = new ArrayList<>();
 		expected.add(com6);
-		expected.add(com2);
 		expected.add(com1);
-		
+		expected.add(com2);
+
 		assertEquals(expected, actual);
 		
 	}
