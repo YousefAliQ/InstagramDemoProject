@@ -1,7 +1,5 @@
 package com.mpp.instagram.Data;
 
-import com.mpp.instagram.Models.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public class AllData {
-    public static List<Post> post;
+   /* public static List<Post> post;
     public static List<User> users;
     public static List<Likes> likes;
     public static List<Comments> comments;
@@ -315,5 +313,5 @@ public class AllData {
 
         Post[] p = {p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12};
         post.addAll(Arrays.asList(p));
-    }
+    }*/
 }
