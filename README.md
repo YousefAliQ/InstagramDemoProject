@@ -1,2 +1,2 @@
 # mppInstagramProjectRepro
-Modern Programming Practice first project ( Instagram simulation project )
+Modern Programming Practice first project ( Instagram Demo project )
